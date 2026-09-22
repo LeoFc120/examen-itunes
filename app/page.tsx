@@ -1,69 +1,113 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
+import { fetchSongs, Song } from "../services/itunesApi";
 
 export default function Home() {
+  // 1. Gestión de estados (Requisito de la rúbrica)
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // 2. Manejo asíncrono y prevención de errores
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchTerm.trim()) return; // Evita peticiones vacías
+
+    setLoading(true);
+    setError(null);
+    setSongs([]); // Limpiamos resultados anteriores
+
+    try {
+      const results = await fetchSongs(searchTerm);
+      if (results.length === 0) {
+        setError("No se encontraron resultados para tu búsqueda.");
+      } else {
+        setSongs(results);
+      }
+    } catch (err) {
+      setError("Ocurrió un error al conectar con el servidor. Intenta de nuevo.");
+    } finally {
+      setLoading(false); // Siempre quitamos el estado de carga al terminar
+    }
+  };
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+    <main className="min-h-screen bg-stone-200 text-white p-8 font-sans">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-4xl font-bold text-center mb-8 tracking-tight">Buscador Musical</h1>
+        
+        {/* Barra de Búsqueda */}
+        <form onSubmit={handleSearch} className="flex gap-4 justify-center mb-12">
+          <input
+            type="text"
+            placeholder="Busca artistas o canciones..."
+            className="w-full max-w-md px-5 py-3 rounded-full text-black focus:outline-none focus:ring-4 focus:ring-indigo-500 shadow-lg transition-all"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-8 py-3 bg-red-600 hover:bg-indigo-500 rounded-full font-semibold transition-all disabled:bg-indigo-900 disabled:text-gray-400 shadow-lg"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            {loading ? "Buscando..." : "Buscar"}
+          </button>
+        </form>
+
+
+        {/* Retroalimentación Visual: Estado Loading */}
+        {loading && (
+          <div className="flex justify-center mb-8">
+            <div className="text-xl text-indigo-400 animate-pulse font-medium">
+              Cargando pistas de audio...
+            </div>
+          </div>
+        )}
+
+        {/* Retroalimentación Visual: Estado Error */}
+        {error && (
+          <div className="flex justify-center mb-8">
+            <div className="text-center text-red-200 bg-red-900/50 border border-red-500 px-6 py-3 rounded-lg max-w-md">
+              {error}
+            </div>
+          </div>
+        )}
+
+        {/* Cuadrícula de Resultados (100% Responsiva) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {songs.map((song) => (
+            //atras del Hover: se puede colocar 'shadow-xl hover:shadow-orange-600/40' para darle color de fondo
+            <div key={song.trackId} className="bg-neutral-800 rounded-xl overflow-hidden  hover:-translate-y-1 transition-all duration-300 p-4 flex flex-col items-center border border-neutral-700">
+              <img
+                // Truco para mejor resolución: la API da 100x100, la cambiamos a 300x300
+                src={song.artworkUrl100.replace('100x100', '300x300')} 
+                alt={song.trackName}
+                className="w-full aspect-square object-cover rounded-lg mb-4 shadow-md"
+              />
+              <h2 className="text-lg font-bold text-center truncate w-full" title={song.trackName}>
+                {song.trackName}
+              </h2>
+              <p className="text-neutral-400 mb-6 text-sm text-center truncate w-full">
+                {song.artistName}
+              </p>
+              
+              {/* Reproductor de Audio nativo */}
+              {song.previewUrl && (
+                <audio controls className="w-full h-9 mt-auto custom-audio">
+                  <source src={song.previewUrl} type="audio/mpeg" />
+                </audio>
+              )}
+            </div>
+          ))}
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
