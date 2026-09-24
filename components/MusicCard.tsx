@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Song } from "../services/itunesApi";
-
+//Este fue uno de los componentes en los cuales se consulto mas con la IA ya que se buscaba que cuando se le diera play se escuchara una parte de la cancion
+//Y que si se le daba play a otra la anterior de pausara para no tener audio sobre-puesto, al igual que este se integraron varias transiciones como la del 
+//borde amarillo cuando se reproduce alguna parte de cancion sobre nuestra etiqueta/card junto a un pequeño zoom a la portada del album 
 export const MusicCard = ({ song, onSelect }: { song: Song; onSelect: () => void }) => {
   
   

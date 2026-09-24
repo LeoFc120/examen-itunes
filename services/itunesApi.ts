@@ -1,6 +1,4 @@
-// services/itunesApi.ts
-
-// Tipado estricto para asegurar calidad de código
+// interface Song que actúa como nuestro "molde" estricto para saber que datos esperar exactamente
 export interface Song {
   trackId: number;
   trackName: string;
@@ -20,20 +18,17 @@ interface ItunesResponse {
 export const fetchSongs = async (term: string) => {
   try {
     const query = encodeURIComponent(term);
-    // Tu código actual
+    // En este apartado podemos definir si music o musicVideo
     const response = await fetch(`https://itunes.apple.com/search?term=${query}&media=music&limit=24`);
     
     if (!response.ok) {
       return null; // Retornamos null si Apple rechaza la conexión
     }
-
     const data = await response.json();
     return data.results;
-    
+    console.log("JSON de Apple:", data);
   } catch (error) {
-    console.error("Fallo de red al consumir la API:", error);
-    // En lugar de usar 'throw error' (que es lo que provoca la pantalla roja), 
-    // retornamos null de forma controlada.
+    console.error("Fallo de red al consumir la API....", error);
     return null; 
   }
 };

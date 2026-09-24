@@ -1,5 +1,9 @@
 import React from "react";
 
+//BarraBusqueda formulario en el cual nuestro cuadro de texto (input) lee su valor de searchTerm 
+// y actualiza la memoria cada vez que el usuario busaca algo en (onChange). 
+// Y el boton de "Buscar" se desactiva automáticamente si loading es true para no realizar sobre clicks.
+
 interface BarraBusq {
   searchTerm: string;
   setSearchTerm: (value: string) => void;

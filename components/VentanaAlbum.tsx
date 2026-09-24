@@ -1,5 +1,12 @@
 import { Song } from "../services/itunesApi";
 
+//Una ventana que se agrego al final ya que se busco que no se viera tan simple a lo cual se uso la IA para poder crear la estructura de la ventana 
+//al igual que una transicion para poder darle algo de vida de la cual funciona de la siguiente manera: Song recibe toda la informacion que proporciona Apple
+//para que solo tome el "año" usando nuestra linea 13 ' const year = new Date(song.releaseDate).getFullYear(); '
+//Como funciona la animacion esta es basada en CSS la cual usamos "fadeIn y popIn" para que esta traves de una etiqueta <style> integrada para poder hacer una aparicion suave y difuminada.
+//Documentacion que se reviso https://developer.mozilla.org/es/docs/Web/JavaScript/Reference/Global_Objects/Date?utm_source=gemini
+
+
 interface ModalProps {
   song: Song;
   onClose: () => void;
@@ -25,6 +32,8 @@ export const SongModal = ({ song, onClose }: ModalProps) => {
         .animacion-fondo { animation: fadeIn 1.2s ease-out forwards; }
         .animacion-modal { animation: popIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
       `}</style>
+
+
 
       {/* 2. Fondo oscuro: ahora tiene la animación y cierra el modal al hacerle clic */}
       <div 

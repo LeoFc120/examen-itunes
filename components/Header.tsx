@@ -1,3 +1,5 @@
+//El Header agrupa el titulo principal al igual que el estado de carga (Loader) con una animación de pulso (animate-pulse) al igual que el recuadro de error por si un busqueda no funciona.
+
 export const Header = () => {
   return (
     <h1 className="text-5xl font-black text-center mb-8 tracking-tighter uppercase text-stone-900 drop-shadow-md">
