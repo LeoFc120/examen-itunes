@@ -20,7 +20,7 @@ export const BarraBusqueda = ({ searchTerm, setSearchTerm, handleSearch, loading
       <button
         type="submit"
         disabled={loading}
-        className="px-8 py-3 bg-red-600 text-white border-2 border-black font-bold uppercase tracking-wider hover:bg-red-500 hover:translate-y-1 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none transition-all disabled:bg-gray-400 disabled:shadow-none"
+        className="px-8 py-3 bg-[#650307] text-white border-2 border-[#020202] font-bold uppercase tracking-wider hover:bg-[#650307]  hover:translate-y-1 shadow-[4px_4px_0px_0px_#020202] hover:shadow-none transition-all disabled:bg-[#85756E] disabled:shadow-none"
       >
         {loading ? "Buscando..." : "Buscar"}
       </button>

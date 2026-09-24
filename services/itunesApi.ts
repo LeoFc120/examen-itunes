@@ -6,6 +6,8 @@ export interface Song {
   trackName: string;
   artistName: string;
   collectionName: string;
+  releaseDate: string;
+  primaryGenreName: string;
   artworkUrl100: string;
   previewUrl: string;
 }
@@ -15,23 +17,23 @@ interface ItunesResponse {
   results: Song[];
 }
 
-export const fetchSongs = async (term: string): Promise<Song[]> => {
+export const fetchSongs = async (term: string) => {
   try {
-    // Formatear el término para URLs (ej. "bad bunny" -> "bad%20bunny")
     const query = encodeURIComponent(term);
-    const response = await fetch(`https://itunes.apple.com/search?term=${query}&media=music&limit=12`);
+    // Tu código actual
+    const response = await fetch(`https://itunes.apple.com/search?term=${query}&media=music&limit=24`);
     
-    // Gestión correcta de errores HTTP requerida por la rúbrica
     if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status}`);
+      return null; // Retornamos null si Apple rechaza la conexión
     }
 
-    const data: ItunesResponse = await response.json();
+    const data = await response.json();
     return data.results;
     
   } catch (error) {
-    console.error("Fallo al consumir la API de iTunes:", error);
-    // Lanzamos el error para que la vista (UI) lo capture y muestre el mensaje al usuario
-    throw error; 
+    console.error("Fallo de red al consumir la API:", error);
+    // En lugar de usar 'throw error' (que es lo que provoca la pantalla roja), 
+    // retornamos null de forma controlada.
+    return null; 
   }
 };

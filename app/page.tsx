@@ -4,12 +4,15 @@ import { fetchSongs, Song } from "../services/itunesApi";
 import { MusicCard } from "../components/MusicCard"; 
 import { BarraBusqueda } from "@/components/BarraBusq";
 import { Header, Loader, ErrorAlert } from "../components/Header";
+import { SongModal } from "../components/VentanaAlbum";
+
 
 export default function Home() {
   const [searchTerm, setSearchTerm] = useState("");
   const [songs, setSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +35,7 @@ export default function Home() {
 
   return (
     // Si quieres cambiar el fondo general (bg-stone-200), lo haces aquí
-    <main className="min-h-screen bg-stone-240 text-stone-900 p-8 font-sans">
+    <main className="min-h-screen bg-[#EADEDA] text-[#020202] p-4 md:p-8 font-sans">
       <div className="max-w-5xl mx-auto">
         
         <Header />
@@ -49,11 +52,17 @@ export default function Home() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {songs.map((song) => (
-            <MusicCard key={song.trackId} song={song} />
+            <MusicCard 
+              key={song.trackId} 
+              song={song} 
+              onSelect={() => setSelectedSong(song)} 
+              />
           ))}
-
         </div>
       </div>
+      {selectedSong && (
+        <SongModal song={selectedSong} onClose={() => setSelectedSong(null)} />
+      )}
     </main>
   );
 }
