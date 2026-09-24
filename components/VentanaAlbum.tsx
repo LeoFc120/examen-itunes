@@ -32,25 +32,17 @@ export const SongModal = ({ song, onClose }: ModalProps) => {
         .animacion-fondo { animation: fadeIn 1.2s ease-out forwards; }
         .animacion-modal { animation: popIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
       `}</style>
-
-
-
-      {/* 2. Fondo oscuro: ahora tiene la animación y cierra el modal al hacerle clic */}
       <div 
         className="absolute inset-0 bg-black/70 backdrop-blur-sm animacion-fondo"
         onClick={onClose}
       ></div>
-      
-      {/* 3. Contenedor del Modal: le agregamos la clase 'animacion-modal' y 'z-10' para que quede por encima del fondo */}
       <div className="bg-[#EADEDA] border-4 border-[#020202] shadow-[8px_8px_0px_0px_#020202] max-w-3xl w-full flex flex-col md:flex-row relative z-10 animacion-modal">
-        
         <button 
           onClick={onClose} 
           className="absolute -top-5 -right-5 bg-[#650307] text-white border-4 border-[#020202] w-12 h-12 font-black text-xl hover:-translate-y-1 shadow-[4px_4px_0px_0px_#020202] hover:shadow-[6px_6px_0px_0px_#020202] transition-all flex items-center justify-center z-20"
         >
           X
         </button>
-
         <div className="md:w-1/2 border-b-4 md:border-b-0 md:border-r-4 border-[#020202]">
            <img 
              src={song.artworkUrl100.replace('100x100', '600x600')} 
@@ -58,20 +50,16 @@ export const SongModal = ({ song, onClose }: ModalProps) => {
              className="w-full h-full object-cover aspect-square" 
            />
         </div>
-
         <div className="p-8 md:w-1/2 flex flex-col justify-center bg-white">
           <span className="inline-block bg-[#FFB126] text-[#020202] font-black uppercase px-3 py-1 border-2 border-[#020202] w-max mb-4 shadow-[2px_2px_0px_0px_#020202]">
             {song.primaryGenreName}
           </span>
-          
           <h2 className="text-4xl font-black uppercase text-[#020202] mb-2 leading-tight">
             {song.trackName}
           </h2>
-          
           <p className="text-2xl font-bold text-[#85756E] mb-8">
             {song.artistName}
           </p>
-
           <div className="space-y-4 border-t-2 border-dashed border-[#85756E] pt-6">
             <div>
               <p className="text-xs font-black uppercase text-[#85756E] tracking-widest">Álbum Original</p>

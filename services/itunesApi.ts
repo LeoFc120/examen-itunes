@@ -19,7 +19,7 @@ export const fetchSongs = async (term: string) => {
   try {
     const query = encodeURIComponent(term);
     // En este apartado podemos definir si music o musicVideo
-    const response = await fetch(`https://itunes.apple.com/search?term=${query}&media=music&limit=24`);
+    const response = await fetch(`https://itunes.apple.com/search?term=${query}&media=music&limit=50`);
     
     if (!response.ok) {
       return null; // Retornamos null si Apple rechaza la conexión

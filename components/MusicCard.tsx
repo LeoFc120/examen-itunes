@@ -7,10 +7,9 @@ import { Song } from "../services/itunesApi";
 export const MusicCard = ({ song, onSelect }: { song: Song; onSelect: () => void }) => {
   
   
-  // 1. Estado para saber si esta tarjeta está reproduciendo audio
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // NUEVA FUNCIÓN: Controla que solo suene un audio a la vez
+  // funcion para que solo se escuche un audio a la vez
   const handlePlay = (e: React.SyntheticEvent<HTMLAudioElement>) => {
     const reproductorGlobal = document.getElementsByTagName('audio');
     for (let i = 0; i < reproductorGlobal.length; i++) {
@@ -19,8 +18,6 @@ export const MusicCard = ({ song, onSelect }: { song: Song; onSelect: () => void
       }
     }
     setIsPlaying(true);
-    
-    // NUEVO: Le avisamos a la página principal que abra el modal
     onSelect(); 
   };
 
@@ -32,13 +29,11 @@ export const MusicCard = ({ song, onSelect }: { song: Song; onSelect: () => void
           : 'border-[#020202] shadow-[6px_6px_0px_0px_#020202)] hover:-translate-y-2'
         }`}
     >
-      
-      {/* Contenedor de la imagen para hacer el efecto de zoom */}
       <div className="w-full overflow-hidden border-2 border-[#020202] mb-4">
         <img
           src={song.artworkUrl100.replace('100x100', '300x300')} 
           alt={song.trackName}
-          // 2. Si está sonando, la imagen hace un zoom in suave
+          // Efecto de zoom en la imagen del album para cuando se reproduzca la cancion 
           className={`w-full aspect-square object-cover transition-transform duration-1000 ${isPlaying ? 'scale-110' : 'scale-100'}`}
         />
       </div>
@@ -55,7 +50,6 @@ export const MusicCard = ({ song, onSelect }: { song: Song; onSelect: () => void
         <audio 
           controls 
           className="w-full h-10 mt-auto custom-audio"
-          // 3. Escuchamos los eventos del audio para cambiar el estado
           onPlay={handlePlay}
           onPause={() => setIsPlaying(false)}
           onEnded={() => setIsPlaying(false)}
